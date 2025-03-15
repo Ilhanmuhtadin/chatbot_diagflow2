@@ -72,7 +72,7 @@ def complete_order(parameter: dict, sesion_id: str):
     
     for nama_makanan, jumlah_makanan in makanan_dipesan.items():
         harga_total = db_helper.get_harga_makanan(nama_makanan, jumlah_makanan)
-        id_makanan = db_helper.get_id_makanan(nama_makanan, jumlah_makanan)
+        id_makanan = db_helper.get_id_makanan(nama_makanan)
 
         logging.info(f"{id_makanan} jumlah {jumlah_makanan} total {harga_total}")
         db_helper.input_makanan_track(id_max, id_makanan, jumlah_makanan, harga_total)
