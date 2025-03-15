@@ -14,21 +14,27 @@ inprogress_orders = {}
 # Konfigurasi logging
 logging.basicConfig(level=logging.INFO)
 
+# Root endpoint untuk menghindari error 405
+@app.get("/")
+def home():
+    return {"message": "FastAPI is running!"}
+
 # Fungsi untuk menjaga API tetap online
 def keep_alive():
     while True:
         try:
-            requests.get("https://chatbot-diagflow2.onrender.com/")  # Ganti dengan URL API-mu
-        except:
-            pass
-        time.sleep(200)  # Ping setiap 5 menit
+            requests.get("https://chatbot-diagflow2.onrender.com/")
+        except Exception as e:
+            logging.error(f"Keep-alive error: {e}")
+        time.sleep(200)  # Ping setiap 3 menit 20 detik
 
-# Jalankan keep-alive saat aplikasi mulai
+# Jalankan keep-alive hanya di lokal
 @app.on_event("startup")
 def startup_event():
-    threading.Thread(target=keep_alive, daemon=True).start()
+    if "RENDER" not in os.environ:  # Render punya environment variable ini
+        threading.Thread(target=keep_alive, daemon=True).start()
 
-@app.post("/")  # Ubah ke POST karena membaca JSON dari request body
+@app.post("/")
 async def handle_req(request: Request):
     try:
         payload = await request.json()
@@ -38,7 +44,7 @@ async def handle_req(request: Request):
 
         sesion_id_raw = outputContexts[0]['name']
         sesion_id = regex_helper.get_sesion(sesion_id_raw)
-        logging.error(f"Session ID: {sesion_id}")
+        logging.info(f"Session ID: {sesion_id}")
 
         intent_handler_dict = {
             'add.order-contexts:ongoing-order': add_to_order,
@@ -50,7 +56,7 @@ async def handle_req(request: Request):
             logging.error("Session ID kosong. Tidak dapat memproses permintaan.")
             return JSONResponse(content={"fulfillmentText": "Terjadi kesalahan, sesi tidak valid. Coba lagi nanti."})
         
-        logging.error("Session ID valid. Memproses permintaan.")
+        logging.info("Session ID valid. Memproses permintaan.")
         return intent_handler_dict[intent_name](parameter, sesion_id)
 
     except Exception as e:
@@ -68,13 +74,13 @@ def complete_order(parameter: dict, sesion_id: str):
         harga_total = db_helper.get_harga_makanan(nama_makanan, jumlah_makanan)
         id_makanan = db_helper.get_id_makanan(nama_makanan, jumlah_makanan)
 
-        logging.error(f"{id_makanan} jumlah {jumlah_makanan} total {harga_total}")
+        logging.info(f"{id_makanan} jumlah {jumlah_makanan} total {harga_total}")
         db_helper.input_makanan_track(id_max, id_makanan, jumlah_makanan, harga_total)
 
     db_helper.input_status_makanan_track(id_max)
     inprogress_orders.pop(sesion_id, None)
 
-    return JSONResponse(content={"fulfillmentText": f"Baik! Pesanan Anda telah kami terima {semua_pesanan} dan sedang diproses. Terima kasih telah memesan di Warung Sate Pak Bagogo! Ini nomor pesanan Anda: {id_max}"})
+    return JSONResponse(content={"fulfillmentText": f"Pesanan Anda telah kami terima {semua_pesanan} dan sedang diproses. Ini nomor pesanan Anda: {id_max}"})
 
 def add_to_order(parameter, sesion_id):
     global inprogress_orders
