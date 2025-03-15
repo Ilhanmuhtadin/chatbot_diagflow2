@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+<<<<<<< HEAD
+logging
+requests
+=======
+pyngrok
+pandas
+
+>>>>>>> 3181120 (first commit)

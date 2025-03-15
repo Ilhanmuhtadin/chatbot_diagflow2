@@ -1,0 +1,67 @@
+{
+    "responseId": "e48ae434-9a62-4654-8a3e-67d20d33bce4-d13e9089",
+    "queryResult": {
+      "queryText": "1 gulai sapi dan 1 tongseng ayam",
+      "parameters": {
+        "last-name": [],
+        "number": [
+          1,
+          1
+        ],
+        "food_item": [
+          "gulai sapi",
+          "Tongseng Ayam"
+        ],
+        "date-time1": []
+      },
+      "allRequiredParamsPresent": true,
+      "fulfillmentText": "Apakah masih ada pesanan lainnya?",
+      "fulfillmentMessages": [
+        {
+          "text": {
+            "text": [
+              "Apakah masih ada pesanan lainnya?"
+            ]
+          }
+        }
+      ],
+      "outputContexts": [
+        {
+          "name": "projects/chat-bot-toko-sate-ojwt/agent/sessions/d5f073a4-ced8-9521-0f3d-bef916528dc6/contexts/on_going_order",
+          "lifespanCount": 7,
+          "parameters": {
+            "food_item.original": [
+              "gulai sapi",
+              "tongseng ayam"
+            ],
+            "food_item": [
+              "gulai sapi",
+              "Tongseng Ayam"
+            ],
+            "number.original": [
+              "1",
+              "1"
+            ],
+            "number": [
+              1,
+              1
+            ],
+            "person": "",
+            "last-name.original": [],
+            "location": [],
+            "date-time1": [],
+            "last-name": [],
+            "person.original": "",
+            "location.original": [],
+            "date-time1.original": []
+          }
+        }
+      ],
+      "intent": {
+        "name": "projects/chat-bot-toko-sate-ojwt/agent/intents/94508885-3297-4b00-a63e-d175676fe67b",
+        "displayName": "add.order- contexts :ongoing-order"
+      },
+      "intentDetectionConfidence": 0.70848256,
+      "languageCode": "id"
+    }
+  }

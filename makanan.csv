@@ -1,0 +1,6 @@
+id_makanan,nama_makanan,harga,diskon
+1,"Sate Ayam",25000000,1000
+2,"Sate Kambing",30000000,5000
+3,"Tongseng Ayam",35000000,8000
+4,"Tongseng Kambing",40000000,7000
+5,"Gulai Sapi",45000000,0
